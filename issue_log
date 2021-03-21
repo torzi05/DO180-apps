@@ -1,0 +1,72 @@
+Name:         mysql
+Namespace:    gabor-ehl-ibm-com-deploy
+Priority:     0
+Node:         ap45-4pq8c-worker-z4zcc/10.0.1.159
+Start Time:   Sun, 21 Mar 2021 12:04:26 -0400
+Labels:       app=quote-php
+              name=mysql
+              template=quote-php-mysql-persistent-template
+Annotations:  kubernetes.io/limit-ranger: LimitRanger plugin set: cpu, memory request for container mysql; cpu, memory limit for container mysql
+              openshift.io/scc: restricted
+Status:       Pending
+IP:           
+IPs:          <none>
+Containers:
+  mysql:
+    Container ID:   
+    Image:          quay.io/torzi05/do180-mysql-57-rhel7
+    Image ID:       
+    Port:           3306/TCP
+    Host Port:      0/TCP
+    State:          Waiting
+      Reason:       ContainerCreating
+    Ready:          False
+    Restart Count:  0
+    Limits:
+      cpu:     1500m
+      memory:  2Gi
+    Requests:
+      cpu:     5m
+      memory:  64Mi
+    Environment:
+      MYSQL_ROOT_PASSWORD:  r00tpa55
+      MYSQL_USER:           user1
+      MYSQL_PASSWORD:       mypa55
+      MYSQL_DATABASE:       quotes
+    Mounts:
+      /var/lib/mysql/data from db-volume (rw)
+      /var/lib/mysql/init from db-init (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-5x4d5 (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             False 
+  ContainersReady   False 
+  PodScheduled      True 
+Volumes:
+  db-volume:
+    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:  dbclaim
+    ReadOnly:   false
+  db-init:
+    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:  dbinit
+    ReadOnly:   false
+  default-token-5x4d5:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  default-token-5x4d5
+    Optional:    false
+QoS Class:       Burstable
+Node-Selectors:  <none>
+Tolerations:     node.kubernetes.io/memory-pressure:NoSchedule
+                 node.kubernetes.io/not-ready:NoExecute for 300s
+                 node.kubernetes.io/unreachable:NoExecute for 300s
+Events:
+  Type     Reason                  Age                 From                              Message
+  ----     ------                  ----                ----                              -------
+  Warning  FailedScheduling        12m (x2 over 12m)   default-scheduler                 persistentvolumeclaim "dbclaim" not found
+  Normal   Scheduled               12m                 default-scheduler                 Successfully assigned gabor-ehl-ibm-com-deploy/mysql to ap45-4pq8c-worker-z4zcc
+  Normal   SuccessfulAttachVolume  12m                 attachdetach-controller           AttachVolume.Attach succeeded for volume "pvc-21450e5d-5671-497d-82c4-8e01e1a408d9"
+  Warning  FailedMount             3m56s               kubelet, ap45-4pq8c-worker-z4zcc  Unable to attach or mount volumes: unmounted volumes=[db-init], unattached volumes=[default-token-5x4d5 db-volume db-init]: timed out waiting for the condition
+  Warning  FailedMount             100s (x4 over 10m)  kubelet, ap45-4pq8c-worker-z4zcc  Unable to attach or mount volumes: unmounted volumes=[db-init], unattached volumes=[db-volume db-init default-token-5x4d5]: timed out waiting for the condition
+  Warning  FailedAttachVolume      89s (x9 over 11m)   attachdetach-controller           AttachVolume.Attach failed for volume "pvc-119c0221-f0df-4b0d-8f2e-603d25807f7a" : Volume "7234a758-9b95-4609-a7bd-b531dee61488" failed to be attached within the alloted time
